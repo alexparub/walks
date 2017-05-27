@@ -1,0 +1,49 @@
+{%extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block back %}
+
+{% endblock %}
+{% block title %}
+<h1> Прогулка {{walk.id}} </h1>
+{% endblock %}
+
+{% block content %}
+
+<div>Описание: {{walk.description}}</div>
+<div>Район: {{walk.oriented_region}}</div>
+<div>Приблизительная длительность: {{walk.oriented_duration}} часов</div>
+<div>Прблизительная протяженность: {{walk.oriented_extension}} км</div>
+<div>Способ передвижения: {{walk.get_type_of_move_display}}</div>
+<h4>Контрольные пункты маршрута:</h4>
+{% for checkpoint in walk.checkpoints.all|dictsort:"index_number" %}
+<div>{{checkpoint.index_number}}:{{checkpoint.place}}. Стоимость: {{checkpoint.points}} б.</div>
+<div>{{checkpoint.puzzle}}</div>
+<br>
+{% endfor%}
+<h3>Список комментариев</h3>
+{% for comment in walk.comments.all %}
+<div class="user">@{{comment.user}}: {{comment.text}}
+{% if comment.user == user%}
+<form method="post" action="{%url 'walks:delete_comment' walk.id comment.id%}">
+    {% csrf_token %}
+    <input type="submit" value="Удалить">
+</form>
+{%endif%}
+</div>
+
+{%endfor %}
+<h4>Добавить комментарий</h4>
+<div>
+<form method="post" action="{%url 'walks:add_comment' walk.id%}">
+    {% csrf_token %}
+        {% crispy form %}
+</form>
+</div>
+<br>
+<b>Понравилось:</b> {{walk.likes.all.count}}
+<form method="post" action="{%url 'walks:add_like' walk.id%}">
+    {% csrf_token %}
+    <input type="submit" value="Понравилось">
+</form>
+
+{% endblock %}

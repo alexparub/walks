@@ -1,0 +1,38 @@
+{% extends 'core/base.html'%}
+{% load crispy_forms_tags %}
+
+<head>
+
+</head>
+{% block title %}<h1 align="center">Авторизация</h1>{% endblock%}
+
+{% block content%}
+
+    {% if form.errors %}
+        <p class="error">Сожалеем, вы неправильно ввели логин или пароль</p>
+    {% endif %}
+
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            {{form | crispy}}
+            {% for error in form.errors%}
+                {{error}}
+            {% endfor%}
+            <table width="100%" cellspacing="5" cellpadding="5">
+                <tr>
+                    <td width="50%" valign="top">
+                        <button class="btn btn-success btn-lg btn-primary btn-block" type="submit">Войти</button>
+                    </td>
+                    <td valign="top">
+                        <form>
+                            <input class="btn btn-lg btn-primary btn-block" type="button" value="Регистрация" onClick='location.href="/users/register/"'>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+    </div>
+
+{% endblock%}

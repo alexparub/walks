@@ -1,0 +1,41 @@
+{%extends "core/base.html" %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+<head>
+    <link rel="stylesheet" href="/Users/alexparub/Documents/Мои курсы/Technotrack/walks" type="text/css"/>
+
+}
+</head>
+{% block back %}
+
+{% endblock %}
+{% block title %}
+<h1> Список маршрутов для прогулок </h1>
+{% endblock %}
+
+{% block content %}
+
+
+    <form method="get">
+        {{ form | crispy }}
+        {% if form%}
+            <div align="center"><button type="submit" class="btn btn-primary">Искать</button></div>
+        {% endif %}
+    </form>
+
+
+
+{% for walk in object_list %}
+{# namespace+name#}
+       <h3><a href = "{%url 'walks:walk_detail' walk.id%}"> Прогулка {{walk.id}}</a></h3>
+            <div><b>Описание</b>: {{walk.description}}</div>
+            <div><b>Район</b>: {{walk.oriented_region}}</div>
+            <div><b>Приблизительная длительность</b>: {{walk.oriented_duration}} часов</div>
+            <div><b>Прблизительная протяженность</b>: {{walk.oriented_extension}} км</div>
+            <div><b>Способ передвижения</b>:
+                <a href= "{%url 'walks:walks_filter' walk.type_of_move%}"> {{walk.get_type_of_move_display}} </a>
+            </div>
+
+<br>
+{% endfor %}
+{% endblock %}
